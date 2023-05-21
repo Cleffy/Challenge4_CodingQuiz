@@ -4,6 +4,8 @@ var questionSection = document.getElementById("question");
 var endSection = document.getElementById("end");
 var highScoreSection = document.getElementById("highScore");
 var initialsForm = document.getElementById("inputScore");
+var timer;
+var countDown = 60;
 
 
 function viewStart(){
@@ -21,6 +23,7 @@ function viewQuestion(){
     highScoreSection.style.display = "none";
 }
 function viewEnd(){
+    clearTimeout(timer);
     timerSection.style.display = "none";
     startSection.style.display = "none";
     questionSection.style.display = "none";
@@ -37,6 +40,17 @@ function viewHighScore(){
 
 function startGame(){
     viewQuestion();
+    timerSection.innerHTML = "Time: " + countDown;
+    timer = setTimeout(timerCountdown, 1000);
+}
+function timerCountdown(){
+    countDown--;
+    timerSection.innerHTML = "Time: " + countDown;
+    if(countDown < 0){
+        viewEnd();
+        return;
+    }
+    timer = setTimeout(timerCountdown, 1000);
 }
 function submitAnswer(selection){
     viewEnd();
@@ -48,5 +62,6 @@ initialsForm.addEventListener('submit', (event) => {
 });
 
 function restart(){
+    countDown = 60;
     viewStart();
 }
