@@ -1,4 +1,57 @@
 body{
     max-width: 1200px;
     margin: auto;
+    font-family: Arial, Helvetica, sans-serif;
+}
+header{
+    display: flex;
+}
+header p{
+    width: 50%;
+}
+#timer{
+    display: none;
+    text-align: right;
+}
+#question{
+    display: none;
+}
+#end{
+    display: none;
+}
+#highScore{
+    display: none;
+}
+h1{
+    font-size: 36pt;
+}
+p{
+    font-size: 16pt;
+}
+
+button, #submitButton{
+    background-color: azure;
+    border-top-right-radius: 8px;
+    border-bottom-right-radius: 8px;
+    font-size: 16pt;
+    margin: 8px;
+}
+
+#question button{
+    display: block;
+}
+
+form{
+    display: inline;
+    font-size: 16pt;
+}
+
+#answer{
+    width: 100%;
+    border: 0px;
+    border-top: 4px;
+    border-style: solid;
+    border-color: #999999;
+    color: #999999;
+    font-style: italic;
 }
