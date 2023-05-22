@@ -10,6 +10,13 @@ var score = 0;
 var answer = 1;
 var questionNum = 0;
 
+class userScore{
+    constructor(initials, score){
+        this.initials = initials;
+        this.score = score;
+    }
+}
+
 var question1 = {
     body: "What symbol comments a single line in JavaScript?",
     answer: "//",
@@ -89,8 +96,66 @@ function submitAnswer(selection){
 
 initialsForm.addEventListener('submit', (event) => {
     event.preventDefault();
+    var newScore = new userScore(document.getElementById("initials").value, score);
+    console.log(newScore.initials, newScore.score);
+    submitScore(newScore);
     viewHighScore();
 });
+
+function submitScore(incomingScore){
+    var previousScores = getPreviousScores();
+    var revisedScores = [];
+    var index = 0;
+    var scoreInserted = false;
+    if(previousScores.length < 1){
+        revisedScores.push(incomingScore);
+    }
+    else{
+        while(index < previousScores.length){
+            if(incomingScore.score > previousScores[index].score){
+                revisedScores.push(incomingScore);
+                scoreInserted = true;
+                index++
+                break;
+            }
+            else{
+                revisedScores.push(previousScores[index]);
+                index++;
+            }
+        }
+        while(index < previousScores.length + 1){
+            if(scoreInserted){
+                revisedScores.push(previousScores[index - 1]);
+                index++;
+            }
+            else{
+                revisedScores.push(incomingScore);
+                scoreInserted = true;
+                index++;
+            }
+        }
+    }
+    setNewScores(revisedScores);
+}
+
+function getPreviousScores(){
+    var previousScores = JSON.parse(localStorage.getItem("highScores"));
+    if(previousScores == null){
+        previousScores = [];
+    }
+    else{
+        clearScores();
+    }
+    return previousScores;
+}
+
+function setNewScores(newScores){
+    localStorage.setItem("highScores", JSON.stringify(newScores));
+}
+
+function clearScores(){
+    localStorage.removeItem("highScores");
+}
 
 function restart(){
     countDown = 60;

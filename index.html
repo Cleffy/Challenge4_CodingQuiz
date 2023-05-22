@@ -34,7 +34,7 @@
             <p id="score">Your Final Score is: </p>
             <form id="inputScore">
                 Enter your initials:
-                <input type="text" name="initials" required>
+                <input type="text" id="initials" required>
                 <input id="submitButton" type="submit" value="Submit">
             </form>
         </section>
@@ -42,7 +42,7 @@
             <h1>High Score</h1>
             <p>Score 1</p>
             <p>Score 2</p>
-            <button id="clear" type="button">Clear Score</button>
+            <button id="clear" type="button" onClick="clearScores()">Clear Score</button>
             <button id="retry" type="button" onClick="restart()">Retry</button>
         </section>
     </main>
