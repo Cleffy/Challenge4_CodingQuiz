@@ -47,6 +47,7 @@ function viewEnd(){
     highScoreSection.style.display = "none";
 }
 function viewHighScore(){
+    printHighScores();
     timerSection.style.display = "none";
     startSection.style.display = "none";
     questionSection.style.display = "none";
@@ -155,6 +156,19 @@ function setNewScores(newScores){
 
 function clearScores(){
     localStorage.removeItem("highScores");
+    printHighScores();
+}
+
+function printHighScores(){
+    var currentScores = getPreviousScores();
+    setNewScores(currentScores);
+    document.getElementById("highScoreList").innerHTML = "";
+    for(record of currentScores){
+        var newLine = document.createElement("p");
+        newLine.textContent = record.initials + " | " + record.score;
+        document.getElementById("highScoreList").appendChild(newLine);
+        console.log("I got here");
+    }
 }
 
 function restart(){
