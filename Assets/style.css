@@ -56,3 +56,6 @@ form{
     font-style: italic;
     display: none;
 }
+#highScoreList{
+    background-color: azure;
+}
