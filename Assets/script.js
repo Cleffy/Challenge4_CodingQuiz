@@ -4,7 +4,11 @@ var questionSection = document.getElementById("question");
 var endSection = document.getElementById("end");
 var highScoreSection = document.getElementById("highScore");
 var initialsForm = document.getElementById("inputScore");
+var userInitials = document.getElementById("initials")
+var answerElement = document.getElementById("answer");
+var highScoreList = document.getElementById("highScoreList");
 var timer;
+var timerAnswer;
 var countDown = 60;
 var score = 0;
 var answer = 1;
@@ -17,11 +21,25 @@ class userScore{
     }
 }
 
-var question1 = {
-    body: "What symbol comments a single line in JavaScript?",
-    answer: "//",
-    options: ["*", "!-", "::"],
+class question{
+    constructor(question, answer, options){
+        this.question = question;
+        this.answer = answer;
+        this.options = options;
+    }
 }
+
+var questions = [];
+questions.push(new question("What symbol comments a single line in JavaScript?", "//", ["*", "!-", "::"]));
+questions.push(new question("What method adds a new element to an array?", ".push", [".pop", ".length", ".remove"]));
+questions.push(new question("A while loop continues until it's condition is _____ .", "false", ["true", "met", "treated"]));
+questions.push(new question("In JavaScript, what variable type is an array?", "object", ["number", "boolean", "symbol"]));
+questions.push(new question("What command selects an HTML element by ID?", "document.getElementByID([name])", ["document.ID([name])", "document.selectID([name])", "HTML.selectID([name])"]));
+questions.push(new question("Fill in the blank: for(var insideObject __ objects)", "of", ["in", "with", "inside"]));
+questions.push(new question("What code skips the default execution of a form submit event?", "event.preventDefault()", ["event.skipDefault()", "event.skipSubmit()", "event.noSubmit()"]));
+questions.push(new question("In JavaScript a NaN is ___ .", "not a number", ["null", "name a number", "not a navigator"]));
+questions.push(new question("Console.log outputs text to ___ .", "the console in dev tools", ["the active HTML element", "an alert box", "a connected gaming console"]));
+questions.push(new question("The switch operator ___ .", "evaluates if a case is true", ["switches two variables", "inverts a booelean", "routes a call to a receiver"]));
 
 function viewStart(){
     timerSection.style.display = "none";
@@ -57,18 +75,19 @@ function viewHighScore(){
 
 function startGame(){
     viewQuestion();
-    generateQuestion();
+    generateQuestion(questionNum);
     timerSection.innerHTML = "Time: " + countDown;
     timer = setTimeout(timerCountdown, 1000);
 }
-function generateQuestion(){
+function generateQuestion(index){
     var optionIndex = 2;
     answer = Math.floor(Math.random() * 4 + 1);
-    document.getElementById("questionInfo").innerHTML = question1.body;
-    document.getElementById("selection" + answer).innerHTML = question1.answer;
+    document.getElementById("questionNum").innerHTML = "Question " + (index + 1);
+    document.getElementById("questionInfo").innerHTML = questions[index].question;
+    document.getElementById("selection" + answer).innerHTML = questions[index].answer;
     for(let i = 1; i < 5; i++){
         if(i != answer){
-            document.getElementById("selection" + i).innerHTML = question1.options[optionIndex];
+            document.getElementById("selection" + i).innerHTML = questions[index].options[optionIndex];
             optionIndex--;
         }
     }
@@ -83,22 +102,31 @@ function timerCountdown(){
     }
     timer = setTimeout(timerCountdown, 1000);
 }
+function answerCountdown(){
+    answerElement.style.display = "none";
+    if(questionNum < questions.length){
+        generateQuestion(questionNum);
+    }
+    else{
+        viewEnd();
+    }
+}
 function submitAnswer(selection){
     if(selection == answer){
         score += 10;
-        document.getElementById("answer").innerHTML = "Correct!";
+        answerElement.innerHTML = "Correct!";
     }
     else{
-        document.getElementById("answer").innerHTML = "Wrong.";
+        answerElement.innerHTML = "Wrong.";
     }
-    document.getElementById("answer").style.display = "block";
-    viewEnd();
+    answerElement.style.display = "block";
+    questionNum++;
+    timerAnswer = setTimeout(answerCountdown, 1000);
 }
 
 initialsForm.addEventListener('submit', (event) => {
     event.preventDefault();
-    var newScore = new userScore(document.getElementById("initials").value, score);
-    console.log(newScore.initials, newScore.score);
+    var newScore = new userScore(userInitials.value, score);
     submitScore(newScore);
     viewHighScore();
 });
@@ -108,7 +136,7 @@ function submitScore(incomingScore){
     var revisedScores = [];
     var index = 0;
     var scoreInserted = false;
-    if(previousScores.length < 1){
+    if(previousScores == null){
         revisedScores.push(incomingScore);
     }
     else{
@@ -142,10 +170,10 @@ function submitScore(incomingScore){
 function getPreviousScores(){
     var previousScores = JSON.parse(localStorage.getItem("highScores"));
     if(previousScores == null){
-        previousScores = [];
+        return;
     }
     else{
-        clearScores();
+        localStorage.removeItem("highScores");
     }
     return previousScores;
 }
@@ -160,20 +188,24 @@ function clearScores(){
 }
 
 function printHighScores(){
+    highScoreList.innerHTML = "";
     var currentScores = getPreviousScores();
+    if(currentScores == null){
+        return;
+    }
     setNewScores(currentScores);
-    document.getElementById("highScoreList").innerHTML = "";
     for(record of currentScores){
         var newLine = document.createElement("p");
         newLine.textContent = record.initials + " | " + record.score;
-        document.getElementById("highScoreList").appendChild(newLine);
-        console.log("I got here");
+        highScoreList.appendChild(newLine);
     }
 }
 
 function restart(){
     countDown = 60;
     score = 0;
-    document.getElementById("answer").style.display = "none";
+    questionNum = 0;
+    userInitials.value = "";
+    answerElement.style.display = "none";
     viewStart();
 }
