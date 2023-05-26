@@ -1,40 +1,67 @@
+/* Variables */
+:root{
+    --buttonColor: #FF1694;
+    --buttonHoverColor: #FC46AA;
+    --buttonActiveColor: #FD5DA8;
+    --buttonTextColor: #FEC5E5;
+    --buttonBorderColor: #F79AC0;
+    --backgroundColor: #FEC5E5;
+    --textColor: #9e4244;
+    --correctColor: #00BF00;
+    --wrongColor: #CC0202;
+    --highlightColor: #4d0F28;
+    --selectColor: #E39FF6;
+    --padding: 8px;
+}
+
 body{
     max-width: 1200px;
     margin: auto;
     font-family: Arial, Helvetica, sans-serif;
+    color: var(--textColor);
+    background-color: var(--backgroundColor);
+    padding: var(--padding);
 }
 header{
+    height:64px;
     display: flex;
+    background-color: var(--buttonColor);
 }
 header p{
     width: 50%;
+    color: var(--buttonTextColor);
+    padding: 0 var(--padding);
 }
 #timer{
     display: none;
     text-align: right;
+    color: var(--buttonTextColor);
 }
-#question{
+#question, #end, #highScore{
     display: none;
 }
-#end{
-    display: none;
-}
-#highScore{
-    display: none;
-}
+
 h1{
     font-size: 36pt;
+    padding: 0 var(--padding);
 }
 p{
     font-size: 16pt;
+    padding: 0 var(--padding);
 }
 
 button, #submitButton{
-    background-color: azure;
+    background-color: var(--buttonColor);
+    color: var(--buttonTextColor);
+    border-style: solid;
+    border-color: var(--textColor);
     border-top-right-radius: 8px;
     border-bottom-right-radius: 8px;
     font-size: 16pt;
     margin: 8px;
+    transition: 100ms;
+    min-width: 200px;
+    text-align: left;
 }
 
 #question button{
@@ -44,6 +71,7 @@ button, #submitButton{
 form{
     display: inline;
     font-size: 16pt;
+    padding: 0 var(--padding);
 }
 
 #answer{
@@ -51,11 +79,38 @@ form{
     border: 0px;
     border-top: 4px;
     border-style: solid;
-    border-color: #999999;
-    color: #999999;
+    border-color: var(--textColor);
+    color: var(--textColor);
     font-style: italic;
     display: none;
 }
-#highScoreList{
-    background-color: azure;
+#highScoreList p{
+    background-color: var(--buttonColor);
+    color: var(--buttonTextColor);
+    width: 200px;
+    padding: 0 var(--padding);
+    border-style: dotted;
+    border-color: var(--backgroundColor);
+    border-radius: 16px;
+}
+/* Hover states */
+button:hover, #submitButton:hover{
+    background-color: var(--buttonHoverColor);
+    box-shadow: 0px 0px 2px 4px var(--buttonBorderColor);
+    scale: 105%;
+}
+header p:hover{
+    color: var(--highlightColor);
+}
+/* Active states */
+button:active, #submitButton:active{
+    background-color: var(--buttonActiveColor);
+    scale: 110%;
+}
+header p:active{
+    color: var(--selectColor);
+}
+/* Media - Already scales down to small screen*/
+@media screen and (max-width: 600px){
+
 }

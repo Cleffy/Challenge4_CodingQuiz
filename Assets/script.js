@@ -116,7 +116,7 @@ function generateQuestion(index){
 */
 function timerCountdown(){
     countDown--;
-    timerSection.style.color = "black";
+    timerSection.style.color = "var(--buttonTextColor)";
     timerSection.innerHTML = "Time: " + countDown;
     if(countDown < 0){
         viewEnd();
@@ -144,11 +144,11 @@ function submitAnswer(selection){
     if(selection == answer){
         score += 10;
         countDown += 2;
-        timerSection.style.color = "green";
+        timerSection.style.color = "var(--correctColor)";
         resultElement.innerHTML = "Correct!";
     }
     else{
-        timerSection.style.color = "red";
+        timerSection.style.color = "var(--wrongColor)";
         resultElement.innerHTML = "Wrong.";
         countDown -= 5;
     }
