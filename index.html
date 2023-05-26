@@ -13,6 +13,10 @@
         <p id="timer"></p>
     </header>
     <main>
+        <!-- 
+            Each State is it's own section that hides or reveals if the game is in that state.
+            State order: Start - Question Portion - End - High scores - return to start
+        -->
         <section id="start">
             <h1>Coding Quiz Challenge</h1>
             <p>You have a minute to answer all 10 questions. Press 'Start Game' to begin.</p>
@@ -26,7 +30,7 @@
             <button id="selection3" type="button" onClick="submitAnswer(3)">Option 3</button>
             <button id="selection4" type="button" onClick="submitAnswer(4)">Option 4</button>
             <div id="answer">
-                <p>Correct!</p>
+                <p id="result"></p>
             </div>
         </section>
         <section id="end">

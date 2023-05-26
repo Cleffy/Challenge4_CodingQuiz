@@ -1,3 +1,6 @@
+/*
+Variables to keep track of quiz state, and frequently queried elements.
+ */
 var timerSection = document.getElementById("timer");
 var startSection = document.getElementById("start");
 var questionSection = document.getElementById("question");
@@ -6,21 +9,23 @@ var highScoreSection = document.getElementById("highScore");
 var initialsForm = document.getElementById("inputScore");
 var userInitials = document.getElementById("initials")
 var answerElement = document.getElementById("answer");
+var resultElement = document.getElementById("result");
 var highScoreList = document.getElementById("highScoreList");
-var timer;
-var timerAnswer;
-var countDown = 60;
-var score = 0;
-var answer = 1;
-var questionNum = 0;
+var timer;                                                      //Timer to keep track of seconds.
+var timerAnswer;                                                //Timer to pause question after an answer.
+var countDown = 60;                                             //Track time remaining
+var score = 0;                                                  //Track score
+var answer = 1;                                                 //Track which option is correct
+var questionNum = 0;                                            //Track question number
 
+/* Score container */
 class userScore{
     constructor(initials, score){
         this.initials = initials;
         this.score = score;
     }
 }
-
+/* Question container */
 class question{
     constructor(question, answer, options){
         this.question = question;
@@ -29,6 +34,7 @@ class question{
     }
 }
 
+/* An array of 10 questions */
 var questions = [];
 questions.push(new question("What symbol comments a single line in JavaScript?", "//", ["*", "!-", "::"]));
 questions.push(new question("What method adds a new element to an array?", ".push", [".pop", ".length", ".remove"]));
@@ -41,6 +47,7 @@ questions.push(new question("In JavaScript a NaN is ___ .", "not a number", ["nu
 questions.push(new question("Console.log outputs text to ___ .", "the console in dev tools", ["the active HTML element", "an alert box", "a connected gaming console"]));
 questions.push(new question("The switch operator ___ .", "evaluates if a case is true", ["switches two variables", "inverts a booelean", "routes a call to a receiver"]));
 
+//Initial state
 function viewStart(){
     timerSection.style.display = "none";
     startSection.style.display = "block";
@@ -48,6 +55,7 @@ function viewStart(){
     endSection.style.display = "none";
     highScoreSection.style.display = "none";
 }
+//Question state
 function viewQuestion(){
     timerSection.style.display = "block";
     startSection.style.display = "none";
@@ -55,6 +63,7 @@ function viewQuestion(){
     endSection.style.display = "none";
     highScoreSection.style.display = "none";
 }
+//End of quiz state
 function viewEnd(){
     clearTimeout(timer);
     document.getElementById("score").innerHTML = "Your Final Score is: " + score;
@@ -64,6 +73,7 @@ function viewEnd(){
     endSection.style.display = "block";
     highScoreSection.style.display = "none";
 }
+//High score state
 function viewHighScore(){
     printHighScores();
     timerSection.style.display = "none";
@@ -73,12 +83,21 @@ function viewHighScore(){
     highScoreSection.style.display = "block";
 }
 
+/*
+Initializes the quiz.
+Generates the text areas for a question.
+Displays the question state.
+Starts the countdown timer.
+*/
 function startGame(){
     viewQuestion();
     generateQuestion(questionNum);
     timerSection.innerHTML = "Time: " + countDown;
     timer = setTimeout(timerCountdown, 1000);
 }
+/*
+Parse a question object into the fields within the Question state.
+*/
 function generateQuestion(index){
     var optionIndex = 2;
     answer = Math.floor(Math.random() * 4 + 1);
@@ -92,7 +111,9 @@ function generateQuestion(index){
         }
     }
 }
-
+/*
+    Event occurs when a second has passed during the quiz.
+*/
 function timerCountdown(){
     countDown--;
     timerSection.innerHTML = "Time: " + countDown;
@@ -102,6 +123,9 @@ function timerCountdown(){
     }
     timer = setTimeout(timerCountdown, 1000);
 }
+/*
+    Selects the next state after answering a question.
+*/
 function answerCountdown(){
     answerElement.style.display = "none";
     if(questionNum < questions.length){
@@ -111,19 +135,26 @@ function answerCountdown(){
         viewEnd();
     }
 }
+/*
+    Checks to see if an answer is right.
+    Waits 1 second after answering before proceeding.
+*/
 function submitAnswer(selection){
     if(selection == answer){
         score += 10;
-        answerElement.innerHTML = "Correct!";
+        resultElement.innerHTML = "Correct!";
     }
     else{
-        answerElement.innerHTML = "Wrong.";
+        resultElement.innerHTML = "Wrong.";
     }
     answerElement.style.display = "block";
     questionNum++;
     timerAnswer = setTimeout(answerCountdown, 1000);
 }
 
+/*
+    Takes form input for a user's initials.
+*/
 initialsForm.addEventListener('submit', (event) => {
     event.preventDefault();
     var newScore = new userScore(userInitials.value, score);
@@ -131,6 +162,9 @@ initialsForm.addEventListener('submit', (event) => {
     viewHighScore();
 });
 
+/*
+    Adds a score to the saved scores.
+*/
 function submitScore(incomingScore){
     var previousScores = getPreviousScores();
     var revisedScores = [];
@@ -167,6 +201,9 @@ function submitScore(incomingScore){
     setNewScores(revisedScores);
 }
 
+/*
+    Reads previous scores and returns them as an array
+*/
 function getPreviousScores(){
     var previousScores = JSON.parse(localStorage.getItem("highScores"));
     if(previousScores == null){
@@ -178,15 +215,24 @@ function getPreviousScores(){
     return previousScores;
 }
 
+/*
+    Saves scores to the local storage.
+*/
 function setNewScores(newScores){
     localStorage.setItem("highScores", JSON.stringify(newScores));
 }
 
+/*
+    Clears high scores from local storage.
+*/
 function clearScores(){
     localStorage.removeItem("highScores");
     printHighScores();
 }
 
+/*
+    Displays high scores on the page.
+*/
 function printHighScores(){
     highScoreList.innerHTML = "";
     var currentScores = getPreviousScores();
@@ -201,6 +247,9 @@ function printHighScores(){
     }
 }
 
+/*
+    Resets the state of the quiz.
+*/
 function restart(){
     countDown = 60;
     score = 0;
