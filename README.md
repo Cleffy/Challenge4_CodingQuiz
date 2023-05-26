@@ -5,6 +5,7 @@ A timed multiple choice quiz
 This project creates a timed multiple choice quiz with ten questions relating to JavaScript. It captures the users input, tallies scores, has a timer, and stores scores on the local drive.
 
 ## Usage
+[Coding Quiz](https://cleffy.github.io/Challenge4_CodingQuiz/)
 ![start](/Assets/startScreen.jpeg)
 The user begins on the start screen. They can select 'Start Game' to begin answering questions.
 
